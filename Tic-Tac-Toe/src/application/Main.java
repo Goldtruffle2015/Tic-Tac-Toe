@@ -1,5 +1,7 @@
 package application;
 	
+import java.io.IOException;
+
 import Gui.Tile;
 import Network.Client;
 import javafx.application.Application;
@@ -25,23 +27,25 @@ public class Main extends Application {
 			System.out.println(player);
 			
 			// Initialize Tiles //
-			for (int i=0;i<3;i++) {
-				for (int j=0;j<3;j++) {
-					tiles[3*i + j] = new Tile(i * 200, j * 200, 3*i + j, player);
-				}
-			}
-
-			
-			// Initialize Window //
 			root = new Pane();
 			for (int i=0;i<3;i++) {
 				for (int j=0;j<3;j++) {
-					root.getChildren().addAll(tiles[3*i + j]);
+					root.getChildren().addAll(new Tile(200*i, 200*j, player));
 				}
 			}
 			
 			scene = new Scene(root, WIDTH, HEIGHT, true);
-
+			
+			// Mouse Listener //
+			scene.setOnMousePressed(event -> {
+				try {
+					client.sendToServer(new int[] {(int) event.getSceneX(), (int) event.getSceneY(), player});
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
+			
+			// Initialize Window //
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Tic-Tac-Toe");
 			primaryStage.show();
