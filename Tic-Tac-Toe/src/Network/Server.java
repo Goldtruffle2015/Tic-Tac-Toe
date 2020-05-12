@@ -13,6 +13,7 @@ public class Server {
 	private ClientHandler[] clients = new ClientHandler[2];
 	private ObjectInputStream input;
 	private ObjectOutputStream output;
+	private int turn;
 	
 	// -- Constructor -- //
 	public Server() throws IOException {
@@ -36,7 +37,8 @@ public class Server {
 				System.out.println("Set up complete.");
 				
 				// Create threads //
-				this.clients[i] = new ClientHandler(this, this.socket, this.input, this.output, i);
+				this.turn = 0;
+				this.clients[i] = new ClientHandler(this, this.socket, this.input, this.output, i, this.turn);
 				
 				// Invoke start function //
 				this.clients[i].start();
@@ -71,18 +73,21 @@ class ClientHandler extends Thread {
 	private int[] rec;
 	private int[] send;
 	private int player;
+	private int turn;
 	
 	// -- Constructor -- //
-	public ClientHandler(Server server, Socket socket, ObjectInputStream input, ObjectOutputStream output, int player) {
+	public ClientHandler(Server server, Socket socket, ObjectInputStream input, ObjectOutputStream output, int player, int turn) {
 		this.server = server;
 		this.input = input;
 		this.output = output;
 		this.player = player;	// Identifies which player the thread belongs to
+		this.turn = turn;	// Identifies which player turn it is
 	}
 	
 	// -- Methods -- //
 	public void send(int[] data) throws IOException {
 		this.output.writeObject(data);
+		this.turn = (this.turn + 1) % 2;	// Switch turns
 	}
 	
 	@Override
@@ -95,8 +100,10 @@ class ClientHandler extends Thread {
 		while (true) {
 			try {
 				this.rec = (int[]) this.input.readObject();
-				this.send = this.rec;
-				this.server.sendAll(this.send);
+				if (this.turn == this.rec[2]) {
+					this.send = this.rec;
+					this.server.sendAll(this.send);	// Send player input to everyone
+				}
 			} catch(IOException | ClassNotFoundException e) {
 				;
 			}

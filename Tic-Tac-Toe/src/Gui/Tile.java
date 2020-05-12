@@ -1,14 +1,12 @@
 package Gui;
 
-import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 
-public class Tile extends StackPane {
+public class Tile extends StackPane {	// Extends StackPane so that text can be drawn
 	// -- Attributes -- //
 	private final int size = 200;	// Defines the size of the rectangle
 	private Rectangle rect;	// Defines the shape of the rectangle
