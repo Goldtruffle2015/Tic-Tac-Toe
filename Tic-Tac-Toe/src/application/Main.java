@@ -45,6 +45,20 @@ public class Main extends Application {
 				}
 			});
 			
+			// Listen for Input //
+			(new Thread(new Runnable() {
+				@Override
+				public void run() {
+					while (true) {
+						try {
+							int[] data = client.getFromServer();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			})).start();
+			
 			// Initialize Window //
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Tic-Tac-Toe");
