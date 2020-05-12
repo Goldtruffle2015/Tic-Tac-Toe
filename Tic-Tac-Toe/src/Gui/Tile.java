@@ -12,14 +12,12 @@ public class Tile extends StackPane {	// Extends StackPane so that text can be d
 	private Rectangle rect;	// Defines the shape of the rectangle
 	private int x;	// Defines the x-coordinate of the rectangle
 	private int y;	// Defines the y-coordinate of the rectangle
-	private int player;	// Defines the player tile belongs to
 	private Text text = new Text();	// This is either X or O
 	
 	// -- Constructor -- //
 	public Tile(int x, int y, int player) {
 		this.x = x;	
 		this.y = y;
-		this.player = player;
 		this.rect = new Rectangle(this.size, this.size);
 		this.rect.setFill(Color.WHITE);
 		this.rect.setStroke(Color.BLACK);
@@ -48,6 +46,10 @@ public class Tile extends StackPane {	// Extends StackPane so that text can be d
 	
 	public int getY() {
 		return this.y;
+	}
+	
+	public String getText() {
+		return this.text.getText();
 	}
 	
 	// -- Methods -- //

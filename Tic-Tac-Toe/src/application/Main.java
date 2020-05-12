@@ -24,7 +24,6 @@ public class Main extends Application {
 		try {
 			client = new Client("192.168.1.71");
 			player = client.getPlayer();
-			System.out.println(player);
 			
 			// Initialize Tiles //
 			root = new Pane();
@@ -68,6 +67,51 @@ public class Main extends Application {
 				}
 			})).start();
 			
+			// Check for combos //
+			(new Thread(new Runnable() {
+				@Override
+				public void run() {
+					boolean run = true;
+					while (run) {
+						// Check rows //
+						for (int row=0;row<3;row++){
+							if (tiles[row].getText() == tiles[row + 3].getText() &&
+									tiles[row].getText() == tiles[row + 6].getText() &&
+									tiles[row].getText() != "") {
+								System.out.println("There is a complete row.");
+								run = false;
+								break;
+							} 
+						}
+						
+						// Check columns //
+						for (int col=0;col<3;col++) {
+							if (tiles[col].getText() == tiles[col + 1].getText() &&
+									tiles[col].getText() == tiles[col + 2].getText() &&
+									tiles[col].getText() != "") {
+								System.out.println("There is a complete column");
+								run = false;
+								break;
+							}
+						}
+						
+						// Diagonals //
+						if (tiles[0].getText() == tiles[4].getText() &&
+								tiles[0].getText() == tiles[8].getText() &&
+								tiles[0].getText() != "") {
+							System.out.println("There is a complete diagonal.");
+							run = false;
+						}
+						if (tiles[2].getText() == tiles[4].getText() &&
+							tiles[2].getText() == tiles[6].getText() &&
+							tiles[2].getText() != "") {
+							System.out.println("There is a complete diagonal.");
+							run = false;
+						}
+					}
+				}
+			})).start();
+			
 			// Initialize Window //
 			for (int i=0;i<9;i++) {
 				root.getChildren().addAll(tiles[i]);
@@ -77,6 +121,7 @@ public class Main extends Application {
 			primaryStage.setResizable(false);
 			primaryStage.setTitle("Tic-Tac-Toe");
 			primaryStage.show();
+
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
