@@ -7,6 +7,7 @@ import Network.Client;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 
@@ -18,6 +19,7 @@ public class Main extends Application {
 	private static Scene scene;
 	private static Client client;
 	private static int player;	// Identifies the player number
+	private static Line line;	// Draws a line 
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -29,6 +31,8 @@ public class Main extends Application {
 			root = new Pane();
 			
 			scene = new Scene(root, WIDTH, HEIGHT, true);
+			
+			line = new Line();
 			
 			for (int i=0;i<3;i++) {
 				for (int j=0;j<3;j++) {
@@ -78,7 +82,8 @@ public class Main extends Application {
 							if (tiles[row].getText() == tiles[row + 3].getText() &&
 									tiles[row].getText() == tiles[row + 6].getText() &&
 									tiles[row].getText() != "") {
-								System.out.println("There is a complete row.");
+								createLine(tiles[row].getCenterX(), tiles[row].getCenterY(), 
+										tiles[row + 6].getCenterX(), tiles[row+6].getCenterY());
 								run = false;
 								break;
 							} 
@@ -89,7 +94,8 @@ public class Main extends Application {
 							if (tiles[col].getText() == tiles[col + 1].getText() &&
 									tiles[col].getText() == tiles[col + 2].getText() &&
 									tiles[col].getText() != "") {
-								System.out.println("There is a complete column");
+								createLine(tiles[col].getCenterX(), tiles[col].getCenterY(), 
+										tiles[col + 2].getCenterX(), tiles[col + 2].getCenterY());
 								run = false;
 								break;
 							}
@@ -99,13 +105,15 @@ public class Main extends Application {
 						if (tiles[0].getText() == tiles[4].getText() &&
 								tiles[0].getText() == tiles[8].getText() &&
 								tiles[0].getText() != "") {
-							System.out.println("There is a complete diagonal.");
+							createLine(tiles[0].getCenterX(), tiles[0].getCenterY(),
+									tiles[8].getCenterX(), tiles[8].getCenterY());
 							run = false;
 						}
 						if (tiles[2].getText() == tiles[4].getText() &&
 							tiles[2].getText() == tiles[6].getText() &&
 							tiles[2].getText() != "") {
-							System.out.println("There is a complete diagonal.");
+							createLine(tiles[2].getCenterX(), tiles[2].getCenterY(),
+									tiles[6].getCenterX(), tiles[6].getCenterY());
 							run = false;
 						}
 					}
@@ -116,6 +124,7 @@ public class Main extends Application {
 			for (int i=0;i<9;i++) {
 				root.getChildren().addAll(tiles[i]);
 			}
+			root.getChildren().addAll(line);
 			
 			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);
@@ -129,5 +138,12 @@ public class Main extends Application {
 	
 	public static void main(String[] args) {
 		launch(args);
+	}
+	
+	public void createLine(int startX, int startY, int endX, int endY) {
+		line.setStartX(startX);
+		line.setStartY(startY);
+		line.setEndX(endX);
+		line.setEndY(endY);
 	}
 }

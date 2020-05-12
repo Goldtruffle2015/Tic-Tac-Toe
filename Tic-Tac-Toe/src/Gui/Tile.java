@@ -52,6 +52,14 @@ public class Tile extends StackPane {	// Extends StackPane so that text can be d
 		return this.text.getText();
 	}
 	
+	public int getCenterX() {
+		return this.x + 100;
+	}
+	
+	public int getCenterY() {
+		return this.y + 100;
+	}
+	
 	// -- Methods -- //
 	public boolean checkIn(int x, int y) {	// Checks if a coordinate lies within a tile
 		if (this.x <= x && x < this.x + 200 && this.y <= y && y < this.y + 200) {
