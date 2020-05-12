@@ -36,7 +36,7 @@ public class Server {
 				System.out.println("Set up complete.");
 				
 				// Create threads //
-				this.clients[i] = new ClientHandler(this, this.socket, this.input, this.output);
+				this.clients[i] = new ClientHandler(this, this.socket, this.input, this.output, i);
 				
 				// Invoke start function //
 				this.clients[i].start();
@@ -47,10 +47,10 @@ public class Server {
 	}
 	
 	// -- Methods -- //
-	public void sendAll(int[] pos) {
+	public void sendAll(int[] data) {
 		for (ClientHandler client : this.clients) {
 			try {
-				client.send(pos);
+				client.send(data);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -70,21 +70,28 @@ class ClientHandler extends Thread {
 	private final ObjectOutputStream output;
 	private int[] rec;
 	private int[] send;
+	private int player;
 	
 	// -- Constructor -- //
-	public ClientHandler(Server server, Socket socket, ObjectInputStream input, ObjectOutputStream output) {
+	public ClientHandler(Server server, Socket socket, ObjectInputStream input, ObjectOutputStream output, int player) {
 		this.server = server;
 		this.input = input;
 		this.output = output;
+		this.player = player;	// Identifies which player the thread belongs to
 	}
 	
 	// -- Methods -- //
-	public void send(int[] pos) throws IOException {
-		this.output.writeObject(pos);
+	public void send(int[] data) throws IOException {
+		this.output.writeObject(data);
 	}
 	
 	@Override
 	public void run() {
+		try {
+			this.output.writeObject(this.player);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		while (true) {
 			try {
 				this.rec = (int[]) this.input.readObject();

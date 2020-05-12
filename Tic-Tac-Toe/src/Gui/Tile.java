@@ -10,17 +10,24 @@ public class Tile extends Pane {
 	private Rectangle rect;	// Defines the shape of the rectangle
 	private int x;	// Defines the x-coordinate of the rectangle
 	private int y;	// Defines the y-coordinate of the rectangle
+	private int id;	// Defines the tile id
+	private int player;	// Defines the player tile belongs to
 	
 	// -- Constructor -- //
-	public Tile(int x, int y) {
+	public Tile(int x, int y, int id, int player) {
 		this.x = x;	
 		this.y = y;
+		this.id = id;
+		this.player = player;
 		this.rect = new Rectangle(this.size, this.size, Color.WHITE);
 		this.rect.setTranslateX(this.x);
 		this.rect.setTranslateY(this.y);
 		this.rect.setStroke(Color.BLACK);
 		super.getChildren().addAll(this.rect);
 		
+//		setOnMouseClicked(event -> {
+//			
+//		});
 	}
 	
 	// -- Setter -- //
@@ -41,8 +48,8 @@ public class Tile extends Pane {
 		return this.y;
 	}
 	
-	public Rectangle getRect() {
-		return this.rect;
+	public int getID() {
+		return this.id;
 	}
 	
 	// -- Methods -- //
