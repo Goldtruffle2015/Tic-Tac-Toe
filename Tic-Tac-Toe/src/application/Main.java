@@ -28,13 +28,16 @@ public class Main extends Application {
 			
 			// Initialize Tiles //
 			root = new Pane();
-			for (int i=0;i<3;i++) {
-				for (int j=0;j<3;j++) {
-					root.getChildren().addAll(new Tile(200*i, 200*j, player));
-				}
-			}
 			
 			scene = new Scene(root, WIDTH, HEIGHT, true);
+			
+			for (int i=0;i<3;i++) {
+				for (int j=0;j<3;j++) {
+					tiles[3*i + j] = new Tile(200*i, 200*j, player);
+					tiles[3*i + j].setTranslateX(200*i);
+					tiles[3*i + j].setTranslateY(200*j);
+				}
+			}
 			
 			// Mouse Listener //
 			scene.setOnMousePressed(event -> {
@@ -52,6 +55,12 @@ public class Main extends Application {
 					while (true) {
 						try {
 							int[] data = client.getFromServer();
+							for (Tile current : tiles) {
+								if (current.checkIn(data[0], data[1])) {
+									current.setText(data[2]);
+									break;
+								}
+							}
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -60,7 +69,12 @@ public class Main extends Application {
 			})).start();
 			
 			// Initialize Window //
+			for (int i=0;i<9;i++) {
+				root.getChildren().addAll(tiles[i]);
+			}
+			
 			primaryStage.setScene(scene);
+			primaryStage.setResizable(false);
 			primaryStage.setTitle("Tic-Tac-Toe");
 			primaryStage.show();
 		} catch(Exception e) {
